@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户仪表板 - 小锐开发</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            color: #fff;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(79, 70, 229, 0.3) 0%, transparent 15%),
+                radial-gradient(circle at 90% 30%, rgba(79, 70, 229, 0.2) 0%, transparent 15%),
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.2) 0%, transparent 15%),
+                radial-gradient(circle at 80% 70%, rgba(79, 70, 229, 0.3) 0%, transparent 15%),
+                radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 20%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* 科技感装饰元素 */
+        .decoration {
+            position: absolute;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .decoration-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, transparent 70%);
+            animation: float 8s infinite ease-in-out;
+        }
+
+        .decoration-square {
+            position: absolute;
+            background: linear-gradient(45deg, rgba(79, 70, 229, 0.2), transparent);
+            transform: rotate(45deg);
+            animation: float 10s infinite ease-in-out;
+        }
+
+        .decoration-triangle {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 25px solid rgba(99, 102, 241, 0.4);
+            animation: float 12s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+            }
+            25% {
+                transform: translateY(-20px) translateX(10px);
+            }
+            50% {
+                transform: translateY(-10px) translateX(-10px);
+            }
+            75% {
+                transform: translateY(-30px) translateX(5px);
+            }
+        }
+
+        /* 导航栏样式 */
+        nav {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #818cf8, #c7d2fe);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: #c7d2fe;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #818cf8;
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #6366f1, #818cf8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* 主要内容区域 */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .welcome-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+        }
+
+        .welcome-section h1 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #818cf8;
+        }
+
+        .welcome-section p {
+            color: #e2e8f0;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #818cf8;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            color: #c7d2fe;
+            font-size: 0.9rem;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .welcome-section {
+                padding: 20px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景装饰元素 -->
+    <div class="decoration decoration-circle" style="top: 10%; left: 5%; width: 100px; height: 100px;"></div>
+    <div class="decoration decoration-square" style="top: 20%; left: 90%; width: 60px; height: 60px;"></div>
+    <div class="decoration decoration-triangle" style="top: 15%; left: 80%;"></div>
+    <div class="decoration decoration-circle" style="top: 70%; left: 15%; width: 70px; height: 70px;"></div>
+    <div class="decoration decoration-square" style="top: 80%; left: 85%; width: 50px; height: 50px;"></div>
+    <div class="decoration decoration-triangle" style="top: 50%; left: 10%;"></div>
+    <div class="decoration decoration-circle" style="top: 40%; left: 85%; width: 80px; height: 80px;"></div>
+    <div class="decoration decoration-triangle" style="top: 65%; left: 75%;"></div>
+
+    <!-- 导航栏 -->
+    <nav>
+        <div class="logo">小锐开发</div>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}" class="active">仪表板</a>
+            <a href="#">个人资料</a>
+            <a href="#">设置</a>
+        </div>
+        <div class="user-info">
+            <div class="user-avatar">{{ session.user[0].upper() if session.user else 'U' }}</div>
+            <span>{{ session.user if session.user else '访客' }}</span>
+            <a href="{{ url_for('logout') }}" style="color: #ef4444;">退出</a>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <div class="container">
+        <div class="welcome-section">
+            <h1>欢迎回来，{{ session.user if session.user else '用户' }}！</h1>
+            <p>这是您的个人仪表板，您可以在这里管理您的账户和查看相关信息。</p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">活跃项目</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">45</div>
+                    <div class="stat-label">完成任务</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">待办事项</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">新通知</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('用户已登录:', '{{ session.user if session.user else "未登录" }}');
+        });
+    </script>
+</body>
+</html>

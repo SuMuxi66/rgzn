@@ -1,0 +1,9 @@
+{
+  "chat_history": [],
+  "settings": {
+    "voice_enabled": true,
+    "api_url": "http://192.168.1.102/v1",
+    "api_key": "app-c6suQBrrp11wDJh6ItBugWlr"
+  },
+  "files": []
+}
