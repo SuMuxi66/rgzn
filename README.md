@@ -18,7 +18,7 @@
 在 `dify_medical_client.py` 文件中配置你的Dify医疗AI API信息：
 
 ```python
-BASE_URL = "http://192.168.1.102/v1"  # 你的Dify医疗AI服务器地址
+BASE_URL = "your-api-url"  # 你的Dify医疗AI服务器地址
 API_KEY = "your-api-key-here"  # 请替换为你的实际API密钥
 ```
 
