@@ -154,7 +154,7 @@ A: 检查网络连接，或改用blocking模式进行测试。
 
 ```python
 # 创建客户端
-client = DifyMedicalClient("http://192.168.1.127/v1", "your-api-key")
+client = DifyMedicalClient("your-api-url", "your-api-key")
 
 # 简单对话
 response = client.send_message("什么是高血压？")
